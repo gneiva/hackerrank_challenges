@@ -1,0 +1,84 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+
+class Result {
+
+    /*
+     * Complete the 'hourglassSum' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts 2D_INTEGER_ARRAY arr as parameter.
+     */
+
+    public static int hourglassSum(List<List<Integer>> arr) {
+    // Write your code here
+    
+        Integer positonStartX = 0;
+        Integer positonStartY = 0;
+        Integer maximum = null;
+        while(
+            positonStartX < arr.size()-2 && 
+            positonStartY < arr.get(0).size()-2){
+                Integer p1 = arr.get(positonStartX).get(positonStartY);
+                Integer p2 = arr.get(positonStartX).get(positonStartY+1);
+                Integer p3 = arr.get(positonStartX).get(positonStartY+2);
+                Integer p4 = arr.get(positonStartX+1).get(positonStartY+1);
+                Integer p5 = arr.get(positonStartX+2).get(positonStartY);
+                Integer p6 = arr.get(positonStartX+2).get(positonStartY+1);
+                Integer p7 = arr.get(positonStartX+2).get(positonStartY+2);
+                
+                positonStartX++; 
+                if(positonStartX >= arr.size()-2){
+                  positonStartX = 0; 
+                  positonStartY++; 
+                }  
+                
+                Integer sum = p1+p2+p3+p4+p5+p6+p7;
+                System.out.println(sum);
+                if(maximum == null || sum >= maximum)
+                    maximum = sum;
+            }
+            
+        return maximum;
+        
+    }
+
+}
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        List<List<Integer>> arr = new ArrayList<>();
+
+        IntStream.range(0, 6).forEach(i -> {
+            try {
+                arr.add(
+                    Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                        .map(Integer::parseInt)
+                        .collect(toList())
+                );
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        int result = Result.hourglassSum(arr);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
